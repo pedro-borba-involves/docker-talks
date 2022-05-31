@@ -1,0 +1,163 @@
+Touring Talks - Docker
+
+Conceitos
+    Docker:
+        - Em alto nivel é um conjuto de ferramentas para empacotar, rodar e gerenciar aplicações e acabar com o "Na minha maquina funciona!"
+        - Usa de 'virtualização' para executar containers
+            - posso executar no ubuntu, imagens baseadas em alpine, fedora, debian....
+            (https://www.simplilearn.com/tutorials/docker-tutorial/docker-vs-virtual-machine,
+            https://devopscon.io/blog/docker/docker-vs-virtual-machine-where-are-the-differences/,
+            https://stackoverflow.com/questions/16047306/how-is-docker-different-from-a-virtual-machine)
+            
+
+    Imagem != Container
+
+     - Imagem é construida, geralmente a partir de outra imagem     
+     - Imagem quando executada se torna um container
+     - Containers tem estado de execução, rodando/parado
+     - Containers podem ter estado de dados, mas não é uma boa pratica, se são dados importantes, não devem fazer parte do container
+     - Containers podem virar uma imagem (docker commit)
+
+
+Hands on
+    - build de imagem (https://docs.docker.com/engine/reference/builder/
+                        https://docs.docker.com/develop/develop-images/dockerfile_best-practices/ )
+        
+        docker build -t minha-imagem-ubuntu-22:0.0.1 .
+        
+    - execução de imagem
+        docker run -it --name meu_teste minha-imagem-ubuntu-22:0.0.1 
+        docker stop meu_teste && docker rm meu_teste
+
+        docker run -it --name meu_teste minha-imagem-ubuntu-22:0.0.1 noloop 
+        docker stop meu_teste && docker rm meu_teste
+
+        docker run -it --name meu_teste minha-imagem-ubuntu-22:0.0.1 bash 
+        docker stop meu_teste && docker rm meu_teste
+
+        docker run -d --name meu_teste minha-imagem-ubuntu-22:0.0.1 
+        docker logs -f meu_teste
+        docker stop meu_teste
+        docker start meu_teste
+        docker logs -f meu_teste
+
+    - alterar container
+        - docker exec -it meu_teste bash
+        criar arquivo
+
+    - salvar imagem do container alterado localmente
+        docker commit meu_teste minha-imagem-ubuntu-22:pog
+
+    - executar imagem alterada
+        docker run -d --name meu_teste_pog minha-imagem-ubuntu-22:pog 
+
+
+Commandos uteis    
+    docker stats 
+    docker ps
+    docker container ls -a
+    docker container prune     
+    docker images
+    docker image prune (-a) *** cuidado ***
+    docker rmi <imagem>
+    docker run 
+    docker logs -f
+    docker stop
+    docker start
+    docker commit 
+    docker exec
+    docker inspect 
+    docker push <imagem> *** cuidado ***
+
+
+Pra pensar
+    Posso, rodar containers baseados em linux no windows? 
+        Sim
+    Posso, rodar containers baseados em windows no linux? 
+        Pode
+    Se em um Dockerfile é obrigatorio informar o FROM com uma imagem, qual foi o FROM da primeira imagem?
+        ?            
+    Posso subir um container docker dentro de outro container docker?
+        Pode
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Respostas:
+    Posso, rodar containers baseados em linux no windows?
+        Sim, mas veja bem
+        https://stackoverflow.com/questions/42158596/can-windows-containers-be-hosted-on-linux
+    Posso, rodar containers baseados em windows no linux? 
+        Não
+        https://stackoverflow.com/questions/42158596/can-windows-containers-be-hosted-on-linux
+    Se em um Dockerfile é obrigatorio informar o FROM com uma imagem, qual foi o FROM da primeira imagem?    
+        Existem outras formas de gerar imagem que não envolvem Dockerfile, existe também a imagem scratch caso não queira se basear em nenhuma outra
+        https://docs.docker.com/develop/develop-images/baseimages/
+        https://hub.docker.com/_/scratch
+        https://github.com/docker-library/hello-world/blob/master/Dockerfile-linux.template
+    Posso subir um container docker dentro de outro container docker?
+        https://devopscube.com/run-docker-in-docker/
+
+Outros links
+    https://blog.lsantos.dev/entendendo-runtimes-de-containers/
+    https://docs.docker.com/registry/spec/api/#catalog
